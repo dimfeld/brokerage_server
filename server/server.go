@@ -10,9 +10,11 @@ import (
 	uuid "github.com/satori/go.uuid"
 
 	"github.com/dimfeld/httptreemux"
+
+	"github.com/dimfeld/brokerage_server/types"
 )
 
-type Handler func(logger log.Logger, engine interface{}, w *ResponseWriter, r *http.Request, params map[string]string)
+type Handler func(logger log.Logger, engine types.BrokerageServerPluginV1, w *ResponseWriter, r *http.Request, params map[string]string)
 type MiddlewareFactory func(handler Handler) httptreemux.HandlerFunc
 
 var (
@@ -83,7 +85,7 @@ func expvarWrapper(w http.ResponseWriter, r *http.Request, params map[string]str
 	expvar.Handler().ServeHTTP(w, r)
 }
 
-func Start(ip string, port int, engine interface{}) { // TODO Proper type for broker engine
+func Start(ip string, port int, engine types.BrokerageServerPluginV1) { // TODO Proper type for broker engine
 	log.Info("Starting server", "port", port)
 
 	var Middleware = func(handler Handler) httptreemux.HandlerFunc {
@@ -120,6 +122,6 @@ func Start(ip string, port int, engine interface{}) { // TODO Proper type for br
 
 }
 
-func HealthHandler(logger log.Logger, engine interface{}, w *ResponseWriter, r *http.Request, params map[string]string) {
+func HealthHandler(logger log.Logger, engine types.BrokerageServerPluginV1, w *ResponseWriter, r *http.Request, params map[string]string) {
 	w.WriteHeader(http.StatusOK)
 }
