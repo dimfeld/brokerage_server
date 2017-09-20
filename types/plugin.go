@@ -1,6 +1,9 @@
 package types
 
-import "errors"
+import (
+	"context"
+	"errors"
+)
 
 var ERR_PLUGIN_NOT_IMPLEMENTED = errors.New("Not implemented for this broker")
 
@@ -10,6 +13,6 @@ type BrokerageServerPluginV1 interface {
 	Status() *ConnectionStatus
 	Error() error
 
-	Accounts() []*Account
-	GetStockQuote(symbol string) *Quote
+	Accounts(ctx context.Context) ([]*Account, error)
+	GetQuote(ctx context.Context, symbol string) (*Quote, error)
 }
