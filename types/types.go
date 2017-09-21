@@ -76,6 +76,10 @@ type Quote struct {
 
 type OptionQuote struct {
 	Quote
+	Strike     float64
+	Underlying float64
+	Expiration time.Time
+
 	Delta float64
 	Gamma float64
 	Theta float64
