@@ -1,46 +1,54 @@
 package brokers
 
 import (
+	"encoding/json"
 	"fmt"
 
+	"github.com/inconshreveable/log15"
+
+	"github.com/dimfeld/brokerage_server/types"
 	ib "github.com/dimfeld/brokerage_server_ib"
-	plugin_intf "github.com/dimfeld/brokerage_server_plugin_intf"
 )
 
 type BrokerEngine struct {
-	plugin_intf.BrokerageServerPluginV1
+	types.BrokerageServerPluginV1
 	Name string
 }
 
-func getPlugin(name string) (plugin_intf.BrokerageServerPluginV1, error) {
+func getPlugin(logger log15.Logger, name string, configData json.RawMessage) (types.BrokerageServerPluginV1, error) {
 	var plugin interface{}
+	var err error
 	switch name {
 	case "ib":
-		plugin = ib.New()
+		plugin, err = ib.New(logger, configData)
 	default:
 		return nil, fmt.Errorf("Unwknown plugin %s", name)
+	}
+
+	if err != nil {
+		return nil, err
 	}
 
 	return wrapPlugin(name, plugin)
 }
 
-// Retunr
-func wrapPlugin(name string, p interface{}) (plugin_intf.BrokerageServerPluginV1, error) {
+// Return a plugin wrapped with dummy function to conform to the latest interface, where needed.
+func wrapPlugin(name string, p interface{}) (types.BrokerageServerPluginV1, error) {
 	switch p.(type) {
-	case plugin_intf.BrokerageServerPluginV1:
-		return p.(plugin_intf.BrokerageServerPluginV1), nil
+	case types.BrokerageServerPluginV1:
+		return p.(types.BrokerageServerPluginV1), nil
 	default:
 		return nil, fmt.Errorf("Plugin %s does not conform to the plugin interface", name)
 	}
 }
 
-func NewBrokerEngine(name string) (*BrokerEngine, error) {
+func NewBrokerEngine(logger log15.Logger, name string, config json.RawMessage) (*BrokerEngine, error) {
 	var err error
 	engine := &BrokerEngine{
 		Name: name,
 	}
 
-	if engine.BrokerageServerPluginV1, err = getPlugin(name); err != nil {
+	if engine.BrokerageServerPluginV1, err = getPlugin(logger, name, config); err != nil {
 		return nil, err
 	}
 
