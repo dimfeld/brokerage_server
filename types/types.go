@@ -8,14 +8,15 @@ import (
 // VendorSpecific holds information that isn't common to the supported platforms,
 // and isn't vital, but might be interesting to use when it's present.
 type VendorSpecific struct {
-	Data map[string]string
-	Keys []string
+	Data map[string]string `json:"data"`
+	// Keys defines a preferred order to print the keys.
+	Keys []string `json:"keys"`
 }
 
 type Account struct {
-	Id          string
-	Broker      string
-	Description string
+	Id          string `json:"id"`
+	Broker      string `json:"broker"`
+	Description string `json:"description"`
 }
 
 func (a Account) String() string {
@@ -36,55 +37,55 @@ const (
 )
 
 type Quote struct {
-	High   float64
-	Low    float64
-	Open   float64
-	Close  float64
-	Mark   float64
-	Volume int64
+	High   float64 `json:"high"`
+	Low    float64 `json:"low"`
+	Open   float64 `json:"open"`
+	Close  float64 `json:"close"`
+	Mark   float64 `json:"mark"`
+	Volume int64   `json:"volume"`
 
-	Bid     float64
-	BidSize int64
-	BidExch string
+	Bid     float64 `json:"bid"`
+	BidSize int64   `json:"bid_size"`
+	BidExch string  `json:"bid_exch"`
 
-	Ask     float64
-	AskSize int64
-	AskExch string
+	Ask     float64 `json:"ask"`
+	AskSize int64   `json:"ask_size"`
+	AskExch string  `json:"ask_exch"`
 
-	LastTime time.Time
-	Last     float64
-	LastSize int64
-	LastExch string
+	LastTime time.Time `json:"last_time"`
+	Last     float64   `json:"last"`
+	LastSize int64     `json:"last_size"`
+	LastExch string    `json:"last_exch"`
 
-	// OptionOpenInterest  float64
-	// OptionHistoricalVol float64
-	// OptionImpliedVol    float64
-	// OptionCallOpenInt   float64
-	// OptionPutOpenInt    float64
-	// OptionCallVolume    float64
-	// OptionPutVolume     float64
+	// OptionOpenInterest  float64 `json:"option_open_int"`
+	// OptionHistoricalVol float64 `json:"option_hv"`
+	// OptionImpliedVol    float64 `json:"option_iv"`
+	// OptionCallOpenInt   float64 `json:"option_call_open_int"`
+	// OptionCallVolume    float64 `json:"option_call_vol"`
+	// OptionPutOpenInt    float64 `json:"option_put_open_int"`
+	// OptionPutVolume     float64 `json:"option_put_vol"`
 
-	// Shortable Tristate
+	// Shortable Tristate `json:"shortable"`
 
-	// AvgVol float64 // Not supported by all brokers
+	// AvgVol float64 `json:"avg_vol"` // Not supported by all brokers
 
-	// YearHigh float64
-	// YearLow  float64
+	// YearHigh float64 `json:"year_low"`
+	// YearLow  float64 `json:"year_high"`
 
-	Time time.Time
+	Time time.Time `json:"time"`
 }
 
 type OptionQuote struct {
 	Quote
-	Strike     float64
-	Underlying float64
-	Expiration time.Time
+	Strike     float64   `json:"strike"`
+	Underlying float64   `json:"underlying"`
+	Expiration time.Time `json:"expiration"`
 
-	Delta float64
-	Gamma float64
-	Theta float64
-	Vega  float64
-	Rho   float64 // Not always supported
+	Delta float64 `json:"delta"`
+	Gamma float64 `json:"gamma"`
+	Theta float64 `json:"theta"`
+	Vega  float64 `json:"vega"`
+	Rho   float64 `json:"rho"` // Not always supported
 }
 
 type SymbolType int
