@@ -40,36 +40,36 @@ type Quote struct {
 	Low    float64
 	Open   float64
 	Close  float64
-	Volume float64
 	Mark   float64
+	Volume int64
 
 	Bid     float64
-	BidSize float64
+	BidSize int64
 	BidExch string
 
 	Ask     float64
-	AskSize float64
+	AskSize int64
 	AskExch string
 
 	LastTime time.Time
 	Last     float64
-	LastSize float64
+	LastSize int64
 	LastExch string
 
-	OptionOpenInterest  float64
-	OptionHistoricalVol float64
-	OptionImpliedVol    float64
-	OptionCallOpenInt   float64
-	OptionPutOpenInt    float64
-	OptionCallVolume    float64
-	OptionPutVolume     float64
+	// OptionOpenInterest  float64
+	// OptionHistoricalVol float64
+	// OptionImpliedVol    float64
+	// OptionCallOpenInt   float64
+	// OptionPutOpenInt    float64
+	// OptionCallVolume    float64
+	// OptionPutVolume     float64
 
-	Shortable Tristate
+	// Shortable Tristate
 
-	AvgVol float64 // Not supported by all brokers
+	// AvgVol float64 // Not supported by all brokers
 
-	YearHigh float64
-	YearLow  float64
+	// YearHigh float64
+	// YearLow  float64
 
 	Time time.Time
 }
@@ -109,4 +109,22 @@ type SymbolDetails struct {
 	Symbol      string
 	Description string
 	Vendor      VendorSpecific
+}
+
+type PutOrCall int
+
+const (
+	Put PutOrCall = iota
+	Call
+)
+
+type Option struct {
+	Underlying string
+	Strike     int
+	Expiration time.Time
+	Type       PutOrCall
+}
+
+type OptionCombo struct {
+	Legs []Option
 }

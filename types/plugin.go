@@ -13,6 +13,6 @@ type BrokerageServerPluginV1 interface {
 	Status() *ConnectionStatus
 	Error() error
 
-	Accounts(ctx context.Context) ([]*Account, error)
-	GetQuote(ctx context.Context, symbol string) (*Quote, error)
+	// Accounts(ctx context.Context) ([]*Account, error)
+	GetStockQuote(ctx context.Context, symbol string) (*Quote, error)
 }
