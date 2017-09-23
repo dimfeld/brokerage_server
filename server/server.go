@@ -1,9 +1,13 @@
 package server
 
 import (
+	"context"
 	"encoding/json"
 	"expvar"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 	"time"
 
 	log "github.com/inconshreveable/log15"
@@ -85,8 +89,8 @@ func expvarWrapper(w http.ResponseWriter, r *http.Request, params map[string]str
 	expvar.Handler().ServeHTTP(w, r)
 }
 
-func Start(ip string, port int, engine types.BrokerageServerPluginV1) { // TODO Proper type for broker engine
-	log.Info("Starting server", "port", port)
+func Run(bind string, engine types.BrokerageServerPluginV1) { // TODO Proper type for broker engine
+	log.Info("Starting server", "port", bind)
 
 	var Middleware = func(handler Handler) httptreemux.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request, params map[string]string) {
@@ -118,8 +122,28 @@ func Start(ip string, port int, engine types.BrokerageServerPluginV1) { // TODO 
 	router.GET("/healthz", Middleware(HealthHandler))
 	router.GET("/debug/vars", expvarWrapper)
 
-	router.GET("/quote/:symbol", Middleware(GetQuote))
+	router.GET("/quotes/:symbol", Middleware(GetQuote))
 
+	server := &http.Server{
+		Addr:    bind,
+		Handler: router,
+	}
+
+	go func() {
+		server.ListenAndServe()
+	}()
+
+	stopChan := make(chan os.Signal)
+	signal.Notify(stopChan, os.Interrupt, syscall.SIGTERM)
+	<-stopChan
+
+	log.Warn("Shutting down...")
+	shutdownCtx, cancelFunc := context.WithTimeout(context.Background(), time.Duration(10*time.Second))
+	defer cancelFunc()
+	err := server.Shutdown(shutdownCtx)
+	if err != nil {
+		log.Error("Error shutting down!", "err", err.Error())
+	}
 }
 
 func HealthHandler(logger log.Logger, engine types.BrokerageServerPluginV1, w *ResponseWriter, r *http.Request, params map[string]string) {
