@@ -89,6 +89,8 @@ func expvarWrapper(w http.ResponseWriter, r *http.Request, params map[string]str
 	expvar.Handler().ServeHTTP(w, r)
 }
 
+type MiddlewareFunc func(handler Handler) httptreemux.HandlerFunc
+
 func Run(bind string, engine types.BrokerageServerPluginV1) { // TODO Proper type for broker engine
 	log.Info("Starting server", "port", bind)
 
@@ -122,7 +124,7 @@ func Run(bind string, engine types.BrokerageServerPluginV1) { // TODO Proper typ
 	router.GET("/healthz", Middleware(HealthHandler))
 	router.GET("/debug/vars", expvarWrapper)
 
-	router.GET("/quotes/:symbol", Middleware(GetQuote))
+	addQuoteHandlers(router, Middleware)
 
 	server := &http.Server{
 		Addr:    bind,
