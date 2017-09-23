@@ -16,6 +16,11 @@ type QuoteAndSymbol struct {
 	Symbol string `json:"symbol"`
 }
 
+type ErrorAndSymbol struct {
+	ArrayOutputError
+	Symbol string `json:"symbol"`
+}
+
 func GetQuote(logger log.Logger, engine types.BrokerageServerPluginV1, w *ResponseWriter, r *http.Request, params map[string]string) {
 	data, err := engine.GetStockQuote(r.Context(), params["symbol"])
 	if err != nil {
@@ -47,31 +52,29 @@ func GetQuotes(logger log.Logger, engine types.BrokerageServerPluginV1, w *Respo
 		errorResponse(w, err, nil)
 	}
 
-	results := make([]QuoteAndSymbol, len(body.Symbols))
+	results := make([]interface{}, len(body.Symbols))
 	wg := sync.WaitGroup{}
-	var symbolErr error
 	ctx := r.Context()
 	for i, symbol := range body.Symbols {
 		wg.Add(1)
 		go func(i int, symbol string) {
-			quote, err := engine.GetStockQuote(ctx, symbol)
-			if err != nil {
-				symbolErr = err
+			if quote, err := engine.GetStockQuote(ctx, symbol); err == nil {
+				results[i] = QuoteAndSymbol{
+					quote,
+					symbol,
+				}
+			} else {
+				results[i] = ErrorAndSymbol{
+					NewArrayOutputError(err),
+					symbol,
+				}
 			}
-			results[i] = QuoteAndSymbol{
-				quote,
-				symbol,
-			}
+
 			wg.Done()
 		}(i, symbol)
 	}
 
 	wg.Wait()
-
-	if symbolErr != nil {
-		errorResponse(w, symbolErr, nil)
-		return
-	}
 
 	w.WriteHeader(http.StatusOK)
 	err := jsoniter.NewEncoder(w).Encode(map[string]interface{}{

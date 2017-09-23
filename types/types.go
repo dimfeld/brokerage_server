@@ -1,7 +1,9 @@
 package types
 
 import (
+	"errors"
 	"fmt"
+	"net/http"
 	"time"
 )
 
@@ -129,3 +131,16 @@ type Option struct {
 type OptionCombo struct {
 	Legs []Option
 }
+
+type ErrorWithCode struct {
+	error
+	code int
+}
+
+func (ec ErrorWithCode) Code() int {
+	return ec.code
+}
+
+var (
+	ErrSymbolNotFound = ErrorWithCode{errors.New("symbol not found"), http.StatusNotFound}
+)
