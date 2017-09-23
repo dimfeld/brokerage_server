@@ -1,0 +1,8 @@
+{
+    "brokers": {
+        "ib": {
+            "debug": 4
+        }
+    },
+    "debug": true
+}
