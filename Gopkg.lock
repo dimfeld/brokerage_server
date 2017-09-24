@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  branch = "master"
+  name = "github.com/dimfeld/brokerage_server_ib"
+  packages = ["."]
+  revision = "caa3308eae1def519d568904e29d7e178663349c"
+
+[[projects]]
   name = "github.com/dimfeld/httptreemux"
   packages = ["."]
   revision = "90654bdd3dfc3cac55538aa620f2f4d855bbdb83"
@@ -14,6 +20,12 @@
   version = "v2.11"
 
 [[projects]]
+  name = "github.com/json-iterator/go"
+  packages = ["."]
+  revision = "6ed27152e0428abfde127acb33b08b03a1e67cac"
+  version = "1.0.2"
+
+[[projects]]
   name = "github.com/mattn/go-colorable"
   packages = ["."]
   revision = "167de6bfdfba052fa6b2d3664c8f5272e23c9072"
@@ -24,6 +36,12 @@
   packages = ["."]
   revision = "fc9e8d8ef48496124e79ae0df75490096eccf6fe"
   version = "v0.0.2"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/nothize/ib"
+  packages = ["."]
+  revision = "57317b4eccfff1f1c6343c49e5e8582f987e94c0"
 
 [[projects]]
   name = "github.com/satori/go.uuid"
@@ -46,6 +64,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "71a8b5bd457e45cf24ce0627ef20b82355be3c1f6ebbf1dc1c9d187173cb771b"
+  inputs-digest = "0e8c1a5a630ac7173a58ddf3f2ec0d7faf6e45d32e226ee2d50a11ae6e6f8374"
   solver-name = "gps-cdcl"
   solver-version = 1
