@@ -24,7 +24,6 @@ type ErrorAndSymbol struct {
 func GetQuote(logger log.Logger, engine types.BrokerageServerPluginV1, w *ResponseWriter, r *http.Request, params map[string]string) {
 	data, err := engine.GetStockQuote(r.Context(), params["symbol"])
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
 		errorResponse(w, err, nil)
 		return
 	}

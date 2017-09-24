@@ -25,4 +25,5 @@ type BrokerageServerPluginV1 interface {
 
 	// Accounts(ctx context.Context) ([]*Account, error)
 	GetStockQuote(ctx context.Context, symbol string) (*Quote, error)
+	GetOptions(ctx context.Context, symbol string) (interface{}, error)
 }

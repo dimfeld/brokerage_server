@@ -125,6 +125,7 @@ func Run(bind string, engine types.BrokerageServerPluginV1) { // TODO Proper typ
 	router.GET("/debug/vars", expvarWrapper)
 
 	addQuoteHandlers(router, Middleware)
+	addOptionHandlers(router, Middleware)
 
 	server := &http.Server{
 		Addr:    bind,

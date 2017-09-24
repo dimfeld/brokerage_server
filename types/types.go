@@ -143,4 +143,5 @@ func (ec ErrorWithCode) Code() int {
 
 var (
 	ErrSymbolNotFound = ErrorWithCode{errors.New("symbol not found"), http.StatusNotFound}
+	ErrDisconnected   = errors.New("broker disconnected")
 )
