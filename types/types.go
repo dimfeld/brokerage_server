@@ -80,9 +80,9 @@ type Quote struct {
 
 type OptionQuote struct {
 	Quote
-	Strike     float64   `json:"strike"`
-	Underlying float64   `json:"underlying"`
-	Expiration time.Time `json:"expiration"`
+	Strike     float64 `json:"strike"`
+	Underlying string  `json:"underlying"`
+	Expiration string  `json:"expiration"`
 
 	Delta float64 `json:"delta"`
 	Gamma float64 `json:"gamma"`
@@ -122,10 +122,18 @@ const (
 	Call
 )
 
+type OptionChain struct {
+	Underlying  string    `json:"underlying"`
+	Multiplier  string    `json:"multiplier,omitempty"`
+	Exchanges   []string  `json:"exchanges,omitempty"`
+	Strikes     []float64 `json:"strikes"`
+	Expirations []string  `json:"expirations"`
+}
+
 type Option struct {
 	Underlying string
-	Strike     int
-	Expiration time.Time
+	Strike     float64
+	Expiration string
 	Type       PutOrCall
 }
 

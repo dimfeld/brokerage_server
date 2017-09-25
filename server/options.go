@@ -12,7 +12,7 @@ import (
 
 func GetOptionAttributes(logger log.Logger, engine types.BrokerageServerPluginV1, w *ResponseWriter, r *http.Request, params map[string]string) {
 
-	data, err := engine.GetOptions(r.Context(), params["symbol"])
+	data, err := engine.GetOptionsChain(r.Context(), params["symbol"])
 	if err != nil {
 		errorResponse(w, err, nil)
 		return
@@ -30,5 +30,5 @@ func GetOptionAttributes(logger log.Logger, engine types.BrokerageServerPluginV1
 }
 
 func addOptionHandlers(router *httptreemux.TreeMux, Middleware MiddlewareFunc) {
-	router.GET("/options/:symbol", Middleware(GetOptionAttributes))
+	router.GET("/options/:symbol/meta", Middleware(GetOptionAttributes))
 }
