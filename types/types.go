@@ -74,7 +74,8 @@ type Quote struct {
 	// YearHigh float64 `json:"year_low"`
 	// YearLow  float64 `json:"year_high"`
 
-	Time time.Time `json:"time"`
+	Time       time.Time `json:"time"`
+	Incomplete bool      `json:"incomplete,omitempty"`
 }
 
 type OptionQuote struct {
