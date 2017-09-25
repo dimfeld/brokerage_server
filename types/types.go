@@ -59,23 +59,30 @@ type Quote struct {
 	LastSize int64     `json:"last_size"`
 	LastExch string    `json:"last_exch"`
 
-	// OptionOpenInterest  float64 `json:"option_open_int"`
-	// OptionHistoricalVol float64 `json:"option_hv"`
-	// OptionImpliedVol    float64 `json:"option_iv"`
-	// OptionCallOpenInt   float64 `json:"option_call_open_int"`
-	// OptionCallVolume    float64 `json:"option_call_vol"`
-	// OptionPutOpenInt    float64 `json:"option_put_open_int"`
-	// OptionPutVolume     float64 `json:"option_put_vol"`
+	OptionHistoricalVolatility float64 `json:"option_hv"`
+	OptionImpliedVolatility    float64 `json:"option_iv"`
+	OptionCallOpenInt          int64   `json:"option_call_open_int"`
+	OptionCallVolume           int64   `json:"option_call_vol"`
+	OptionPutOpenInt           int64   `json:"option_put_open_int"`
+	OptionPutVolume            int64   `json:"option_put_vol"`
 
 	// Shortable Tristate `json:"shortable"`
 
-	// AvgVol float64 `json:"avg_vol"` // Not supported by all brokers
+	AvgVol float64 `json:"avg_vol"` // Not supported by all brokers
 
 	// YearHigh float64 `json:"year_low"`
 	// YearLow  float64 `json:"year_high"`
 
 	Time       time.Time `json:"time"`
 	Incomplete bool      `json:"incomplete,omitempty"`
+}
+
+type OptionsQuoteParams struct {
+	Underlying  string
+	Expirations []string
+	Strikes     []float64
+	Puts        bool
+	Calls       bool
 }
 
 type OptionQuote struct {
