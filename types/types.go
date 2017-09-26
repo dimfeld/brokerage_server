@@ -77,25 +77,21 @@ type Quote struct {
 	Incomplete bool      `json:"incomplete,omitempty"`
 }
 
-type OptionsQuoteParams struct {
-	Underlying  string
-	Expirations []string
-	Strikes     []float64
-	Puts        bool
-	Calls       bool
-}
-
 type OptionQuote struct {
 	Quote
-	Strike     float64 `json:"strike"`
-	Underlying string  `json:"underlying"`
-	Expiration string  `json:"expiration"`
+	Strike        float64   `json:"strike"`
+	Underlying    string    `json:"underlying"`
+	Expiration    string    `json:"expiration"`
+	Type          PutOrCall `json:"type"`
+	MinPriceDelta float64   `json:"min_price_delta"`
+	FullSymbol    string    `json:"full_symbol"` // The full symbol for the option
 
-	Delta float64 `json:"delta"`
-	Gamma float64 `json:"gamma"`
-	Theta float64 `json:"theta"`
-	Vega  float64 `json:"vega"`
-	Rho   float64 `json:"rho"` // Not always supported
+	ModelPrice float64 `json:"model_price"`
+	Delta      float64 `json:"delta"`
+	Gamma      float64 `json:"gamma"`
+	Theta      float64 `json:"theta"`
+	Vega       float64 `json:"vega"`
+	Rho        float64 `json:"rho"` // Not always supported
 }
 
 type SymbolType int
@@ -122,11 +118,11 @@ type SymbolDetails struct {
 	Vendor      VendorSpecific
 }
 
-type PutOrCall int
+type PutOrCall string
 
 const (
-	Put PutOrCall = iota
-	Call
+	Put  PutOrCall = "PUT"
+	Call           = "CALL"
 )
 
 type OptionChain struct {
