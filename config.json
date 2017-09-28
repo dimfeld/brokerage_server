@@ -4,5 +4,12 @@
             "debug": 4
         }
     },
+    "priority": {
+        "equity_info": ["ib"],
+        "equity_quotes": ["ib"],
+        "option_info": ["ib"],
+        "option_quotes": ["ib"],
+        "fallback": "ib"
+    },
     "debug": true
 }

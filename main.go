@@ -35,5 +35,10 @@ func main() {
 		os.Exit(1)
 	}
 
-	server.Run(config.Bind, plugin)
+	engineList := brokers.NewEngineList(
+		map[string]*brokers.BrokerEngine{"ib": plugin},
+		&config.Priority,
+	)
+
+	server.Run(config.Bind, engineList)
 }

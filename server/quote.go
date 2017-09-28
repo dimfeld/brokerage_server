@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"sync"
 
+	"github.com/dimfeld/brokerage_server/brokers"
+
 	log "github.com/inconshreveable/log15"
 	jsoniter "github.com/json-iterator/go"
 
@@ -21,7 +23,8 @@ type ErrorAndSymbol struct {
 	Symbol string `json:"symbol"`
 }
 
-func GetQuote(logger log.Logger, engine types.BrokerageServerPluginV1, w *ResponseWriter, r *http.Request, params map[string]string) {
+func GetQuote(logger log.Logger, engines *brokers.EngineList, w *ResponseWriter, r *http.Request, params map[string]string) {
+	engine, err := engines.Get(brokers.PurposeEquityQuotes)
 	data, err := engine.GetStockQuote(r.Context(), params["symbol"])
 	if err != nil {
 		errorResponse(w, err, nil)
@@ -41,7 +44,7 @@ func GetQuote(logger log.Logger, engine types.BrokerageServerPluginV1, w *Respon
 	}
 }
 
-func GetQuotes(logger log.Logger, engine types.BrokerageServerPluginV1, w *ResponseWriter, r *http.Request, _ map[string]string) {
+func GetQuotes(logger log.Logger, engines *brokers.EngineList, w *ResponseWriter, r *http.Request, _ map[string]string) {
 	body := struct {
 		Symbols []string `json:"symbols"`
 	}{}
@@ -50,6 +53,8 @@ func GetQuotes(logger log.Logger, engine types.BrokerageServerPluginV1, w *Respo
 		w.WriteHeader(http.StatusBadRequest)
 		errorResponse(w, err, nil)
 	}
+
+	engine, err := engines.Get(brokers.PurposeEquityQuotes)
 
 	results := make([]interface{}, len(body.Symbols))
 	wg := sync.WaitGroup{}
@@ -76,7 +81,7 @@ func GetQuotes(logger log.Logger, engine types.BrokerageServerPluginV1, w *Respo
 	wg.Wait()
 
 	w.WriteHeader(http.StatusOK)
-	err := jsoniter.NewEncoder(w).Encode(map[string]interface{}{
+	err = jsoniter.NewEncoder(w).Encode(map[string]interface{}{
 		"status": "ok",
 		"data":   results,
 	})

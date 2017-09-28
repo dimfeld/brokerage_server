@@ -15,14 +15,14 @@ import (
 
 	"github.com/dimfeld/httptreemux"
 
-	"github.com/dimfeld/brokerage_server/types"
+	"github.com/dimfeld/brokerage_server/brokers"
 )
 
-type Handler func(logger log.Logger, engine types.BrokerageServerPluginV1, w *ResponseWriter, r *http.Request, params map[string]string)
+type Handler func(logger log.Logger, engines *brokers.EngineList, w *ResponseWriter, r *http.Request, params map[string]string)
 type MiddlewareFactory func(handler Handler) httptreemux.HandlerFunc
 
 var (
-	ERR_NOT_IMPLEMENTED = Error{http.StatusNotImplemented, "Not implemented"}
+	ErrNotImplemented = Error{http.StatusNotImplemented, "Not implemented"}
 )
 
 type HttpError interface {
@@ -91,7 +91,7 @@ func expvarWrapper(w http.ResponseWriter, r *http.Request, params map[string]str
 
 type MiddlewareFunc func(handler Handler) httptreemux.HandlerFunc
 
-func Run(bind string, engine types.BrokerageServerPluginV1) { // TODO Proper type for broker engine
+func Run(bind string, engine *brokers.EngineList) {
 	log.Info("Starting server", "port", bind)
 
 	var Middleware = func(handler Handler) httptreemux.HandlerFunc {
@@ -149,6 +149,6 @@ func Run(bind string, engine types.BrokerageServerPluginV1) { // TODO Proper typ
 	}
 }
 
-func HealthHandler(logger log.Logger, engine types.BrokerageServerPluginV1, w *ResponseWriter, r *http.Request, params map[string]string) {
+func HealthHandler(logger log.Logger, engine *brokers.EngineList, w *ResponseWriter, r *http.Request, params map[string]string) {
 	w.WriteHeader(http.StatusOK)
 }

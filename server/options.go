@@ -7,6 +7,7 @@ import (
 
 	"github.com/json-iterator/go"
 
+	"github.com/dimfeld/brokerage_server/brokers"
 	"github.com/dimfeld/brokerage_server/types"
 	"github.com/dimfeld/httptreemux"
 	log "github.com/inconshreveable/log15"
@@ -21,7 +22,13 @@ var (
 	ErrNoExpiriesFound = Error{code: http.StatusBadRequest, message: "no expiries found in requested range"}
 )
 
-func GetOptionsAttributes(logger log.Logger, engine types.BrokerageServerPluginV1, w *ResponseWriter, r *http.Request, params map[string]string) {
+func GetOptionsAttributes(logger log.Logger, engines *brokers.EngineList, w *ResponseWriter, r *http.Request, params map[string]string) {
+
+	engine, err := engines.Get(brokers.PurposeOptionInfo)
+	if engine != nil {
+		errorResponse(w, err, nil)
+		return
+	}
 
 	data, err := engine.GetOptionsChain(r.Context(), params["symbol"])
 	if err != nil {
@@ -40,7 +47,13 @@ func GetOptionsAttributes(logger log.Logger, engine types.BrokerageServerPluginV
 	}
 }
 
-func GetOptionsQuote(logger log.Logger, engine types.BrokerageServerPluginV1, w *ResponseWriter, r *http.Request, params map[string]string) {
+func GetOptionsQuote(logger log.Logger, engines *brokers.EngineList, w *ResponseWriter, r *http.Request, params map[string]string) {
+
+	engine, err := engines.Get(brokers.PurposeOptionQuotes)
+	if err != nil {
+		errorResponse(w, err, nil)
+		return
+	}
 
 	ctx := r.Context()
 	symbol := params["symbol"]

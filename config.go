@@ -6,6 +6,8 @@ import (
 
 	log "github.com/inconshreveable/log15"
 	jsoniter "github.com/json-iterator/go"
+
+	"github.com/dimfeld/brokerage_server/brokers"
 )
 
 type ServerConfig struct {
@@ -13,6 +15,8 @@ type ServerConfig struct {
 	Bind       string                     `json:"bind"`
 	Production bool                       `json:"production"`
 	Debug      bool                       `json:"debug"`
+
+	Priority brokers.Priorities `json:"priority"`
 }
 
 func configureLogging(config *ServerConfig) {
