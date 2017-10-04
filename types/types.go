@@ -89,3 +89,10 @@ var (
 	ErrSymbolNotFound = ErrorWithCode{errors.New("symbol not found"), http.StatusNotFound}
 	ErrDisconnected   = errors.New("broker disconnected")
 )
+
+func ArgError(message string) ErrorWithCode {
+	return ErrorWithCode{
+		error: errors.New(message),
+		code:  http.StatusBadRequest,
+	}
+}
