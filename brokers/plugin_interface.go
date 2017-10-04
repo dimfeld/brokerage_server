@@ -72,18 +72,18 @@ type PriorityAndPurpose struct {
 type Purpose int
 
 const (
-	PurposeOther Purpose = 0
-	PurposeEquityQuotes
-	PurposeEquityInfo
-	PurposeOptionQuotes
-	PurposeOptionInfo
+	PurposeOther        Purpose = 0
+	PurposeEquityQuotes         = 1
+	PurposeEquityInfo           = 2
+	PurposeOptionQuotes         = 3
+	PurposeOptionInfo           = 4
 )
 
 func (p Priorities) ToList() []PriorityAndPurpose {
 	expectedOrder := []Purpose{PurposeOther, PurposeEquityQuotes, PurposeEquityInfo, PurposeOptionQuotes, PurposeOptionInfo}
 	for i, value := range expectedOrder {
 		if i != int(value) {
-			panic("Purpose list order mismatch")
+			panic(fmt.Sprintf("Purpose list order mismatch, saw %d expected %d", value, i))
 		}
 	}
 

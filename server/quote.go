@@ -4,11 +4,10 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/dimfeld/brokerage_server/brokers"
-
 	log "github.com/inconshreveable/log15"
 	jsoniter "github.com/json-iterator/go"
 
+	"github.com/dimfeld/brokerage_server/brokers"
 	"github.com/dimfeld/brokerage_server/types"
 	"github.com/dimfeld/httptreemux"
 )

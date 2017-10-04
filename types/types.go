@@ -2,7 +2,6 @@ package types
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"time"
 )
@@ -13,16 +12,6 @@ type VendorSpecific struct {
 	Data map[string]string `json:"data"`
 	// Keys defines a preferred order to print the keys.
 	Keys []string `json:"keys"`
-}
-
-type Account struct {
-	Id          string `json:"id"`
-	Broker      string `json:"broker"`
-	Description string `json:"description"`
-}
-
-func (a Account) String() string {
-	return fmt.Sprintf("%s:%s - %s", a.Broker, a.Id, a.Description)
 }
 
 type ConnectionStatus struct {

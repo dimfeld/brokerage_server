@@ -126,6 +126,7 @@ func Run(bind string, engine *brokers.EngineList) {
 
 	addQuoteHandlers(router, Middleware)
 	addOptionHandlers(router, Middleware)
+	addAccountHandlers(router, Middleware)
 
 	server := &http.Server{
 		Addr:    bind,
