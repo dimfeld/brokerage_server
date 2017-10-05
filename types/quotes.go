@@ -20,10 +20,10 @@ type Quote struct {
 	AskSize int64   `json:"ask_size,omitempty"`
 	AskExch string  `json:"ask_exch,omitempty"`
 
-	LastTime time.Time `json:"last_time,omitempty"`
-	Last     float64   `json:"last,omitempty"`
-	LastSize int64     `json:"last_size,omitempty"`
-	LastExch string    `json:"last_exch,omitempty"`
+	LastTime *time.Time `json:"last_time,omitempty"`
+	Last     float64    `json:"last,omitempty"`
+	LastSize int64      `json:"last_size,omitempty"`
+	LastExch string     `json:"last_exch,omitempty"`
 
 	OptionHistoricalVolatility float64 `json:"option_hv,omitempty"`
 	OptionImpliedVolatility    float64 `json:"option_iv,omitempty"`
@@ -39,7 +39,7 @@ type Quote struct {
 	// YearHigh float64 `json:"year_low"`
 	// YearLow  float64 `json:"year_high"`
 
-	Time       time.Time `json:"time"`
+	Time       time.Time `json:"time,omitempty"`
 	Incomplete bool      `json:"incomplete,omitempty"`
 }
 

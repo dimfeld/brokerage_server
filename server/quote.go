@@ -24,6 +24,10 @@ type ErrorAndSymbol struct {
 
 func GetQuote(logger log.Logger, engines *brokers.EngineList, w *ResponseWriter, r *http.Request, params map[string]string) {
 	engine, err := engines.Get(brokers.PurposeEquityQuotes)
+	if err != nil {
+		errorResponse(w, err, nil)
+		return
+	}
 	data, err := engine.GetStockQuote(r.Context(), params["symbol"])
 	if err != nil {
 		errorResponse(w, err, nil)
