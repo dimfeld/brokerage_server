@@ -36,6 +36,7 @@ type BrokerageServerPluginV1 interface {
 	GetOptionsChain(ctx context.Context, symbol string) (OptionChain, error)
 	GetOptionsQuotes(ctx context.Context, params OptionsQuoteParams) ([]*OptionQuote, error)
 	GetHistoricalData(ctx context.Context, params HistoricalDataParams) ([]*Quote, error)
+	GetPositions(ctx context.Context) ([]*Position, error)
 }
 
 type BrokerageServerPluginLatest = BrokerageServerPluginV1

@@ -55,6 +55,55 @@ func GetAccounts(logger log.Logger, engines *brokers.EngineList, w *ResponseWrit
 	}
 }
 
+func GetPositions(logger log.Logger, engines *brokers.EngineList, w *ResponseWriter, r *http.Request, params map[string]string) {
+
+	wg := &sync.WaitGroup{}
+
+	brokerPositions := make([][]*types.Position, len(engines.Engines))
+	i := 0
+	var outErr error
+	for _, e := range engines.Engines {
+		wg.Add(1)
+		go func(e *brokers.BrokerEngine, index int) {
+			if positions, err := e.GetPositions(r.Context()); err == nil {
+				brokerPositions[index] = positions
+			} else {
+				outErr = err
+			}
+
+			wg.Done()
+		}(e, i)
+		i += 1
+	}
+
+	wg.Wait()
+
+	totalLength := 0
+	for _, p := range brokerPositions {
+		totalLength += len(p)
+	}
+
+	positions := make([]*types.Position, 0, totalLength)
+	for _, p := range brokerPositions {
+		positions = append(positions, p...)
+	}
+
+	if outErr != nil {
+		errorResponse(w, outErr, nil)
+		return
+	}
+
+	err := jsoniter.NewEncoder(w).Encode(map[string]interface{}{
+		"status": "ok",
+		"data":   positions,
+	})
+
+	if err != nil {
+		logger.Error("Response encoding error", "err", err)
+	}
+}
+
 func addAccountHandlers(router *httptreemux.TreeMux, Middleware MiddlewareFunc) {
 	router.GET("/accounts", Middleware(GetAccounts))
+	router.GET("/positions", Middleware(GetPositions))
 }

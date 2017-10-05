@@ -53,8 +53,9 @@ type SymbolDetails struct {
 type PutOrCall string
 
 const (
-	Put  PutOrCall = "PUT"
-	Call           = "CALL"
+	NonOption PutOrCall = ""
+	Put                 = "PUT"
+	Call                = "CALL"
 )
 
 type OptionChain struct {
