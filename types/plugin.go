@@ -3,6 +3,7 @@ package types
 import (
 	"context"
 	"errors"
+	"time"
 )
 
 var ERR_PLUGIN_NOT_IMPLEMENTED = errors.New("Not implemented for this broker")
@@ -37,6 +38,7 @@ type BrokerageServerPluginV1 interface {
 	GetOptionsQuotes(ctx context.Context, params OptionsQuoteParams) ([]*OptionQuote, error)
 	GetHistoricalData(ctx context.Context, params HistoricalDataParams) ([]*Quote, error)
 	GetPositions(ctx context.Context) ([]*Position, error)
+	GetTrades(ctx context.Context, startDate time.Time) ([]*Trade, error)
 }
 
 type BrokerageServerPluginLatest = BrokerageServerPluginV1
