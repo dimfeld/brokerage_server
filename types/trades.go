@@ -10,7 +10,6 @@ type Execution struct {
 	Multiplier  int     `json:"multiplier,omitempty"`
 
 	Exchange    string  `json:"exchange"`
-	Side        string  `json:"side"`
 	Size        int     `json:"size"`
 	Price       float64 `json:"price"`
 	Commissions float64 `json:"commissions"`
