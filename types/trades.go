@@ -7,13 +7,12 @@ type Execution struct {
 	OptionType  string  `json:"type,omitempty"`
 	Strike      float64 `json:"strike,omitempty"`
 	Expiration  string  `json:"expiration,omitempty"`
-	Multiplier  string  `json:"multiplier,omitempty"`
+	Multiplier  int     `json:"multiplier,omitempty"`
 
 	Exchange    string  `json:"exchange"`
 	Side        string  `json:"side"`
 	Size        int     `json:"size"`
 	Price       float64 `json:"price"`
-	AvgPrice    float64 `json:"avg_price"`
 	Commissions float64 `json:"commissions"`
 	RealizedPnL float64 `json:"realized_pnl,omitempty"`
 
@@ -26,6 +25,9 @@ type Trade struct {
 	Broker  string `json:"broker"`
 	OrderId string `json:"id"`
 	Symbol  string `json:"symbol"`
+
+	Size  int
+	Price float64
 
 	Executions []*Execution `json:"executions"`
 
