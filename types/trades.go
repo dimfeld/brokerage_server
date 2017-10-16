@@ -26,8 +26,8 @@ type Trade struct {
 	OrderId string `json:"id"`
 	Symbol  string `json:"symbol"`
 
-	Size  int
-	Price float64
+	Size  int     `json:"size"`
+	Price float64 `json:"price"`
 
 	Executions []*Execution `json:"executions"`
 
